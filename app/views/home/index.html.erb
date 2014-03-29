@@ -1,0 +1,15 @@
+<p>User: <%= current_user.name %></p>
+<p>Your past donations:</p>
+
+<ul class="list-group">
+<% current_user.donations.each do |c| %>
+  <li class='donation list-group-item'>
+    <span  class='label label-default'><%= c.class.to_s %></span>
+     <%= link_to c.title, edit_donation_path(c) %>
+  </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Donate Voucher', new_donation_path(:type => 'Voucher'), :class => "btn" %>
+<%= link_to 'Donate Experience', new_donation_path(:type => 'Experience') , :class => "btn" %>
+<%= link_to 'Donate Physical Item', new_donation_path(:type => 'PhysicalItem') , :class => "btn" %>

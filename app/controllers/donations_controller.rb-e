@@ -1,0 +1,21 @@
+class DonatesController < ApplicationController
+  before_filter :authenticate_user!
+  
+  def create
+    @user = User.firnd(params[:user_id])
+    @donate = @user.donation.build(params[:donation])
+    @donate.save!
+    
+  end
+  
+  def new
+    @type = params[:type]
+    if ['Voucher', 'Experience'].include?(@type)
+      @donate = Donation.new(:type => @type)
+    else
+      raise 'Invalid donate type requested'
+    end  
+  end
+
+  
+end

@@ -1,0 +1,74 @@
+<%= form_for @donation, as: :donation, url: donations_path, html: { multipart: :true, method: 'post'} do |f| %>
+  <%= hidden_field_tag 'type', @donation.class.to_s %>
+  <% if @donation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@donation.errors.count, "error") %> prohibited this donation from being saved:</h2>
+      <ul>
+      <% @donation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
+  </p>
+
+  <% if Voucher === @donation %>
+    <p>
+      <%= f.label :expires_at %><br>
+      <%= f.datetime_select :expires_at %>
+    </p>
+  <% elsif Experience === @donation %>
+    <p>
+      <%= f.label :contact %><br>
+      <%= f.text_field :contact %>
+    </p>
+      <p>
+        <%= f.label :latitude %><br>
+        <% if @donation.latitude %>
+          <%= f.number_field :latitude %>
+        <% else %>  
+          <input name="donation[coordinates][]" type="number"/>
+        <% end %>  
+      </p>
+      <p>
+        <%= f.label :longtitude %><br>
+        <% if @donation.longtitude %>        
+          <%= f.number_field :longtitude %>
+        <% else %>  
+          <input name="donation[coordinates][]" type="number"/>
+        <% end %>  
+      </p>
+    <% unless @donation.coordinates.blank? %>
+      <%= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@donation.latitude}%2C#{@donation.longtitude}" %>
+    <% end %>
+    
+  <% elsif PhysicalItem === @donation %>  
+    <p>
+      <%= f.label :height %><br>
+      <%= f.text_field :height %>
+    </p>
+    <p>
+      <%= f.label :width %><br>
+      <%= f.text_field :width %>
+    </p>
+    <p>
+      <%= f.label :weight %><br>
+      <%= f.text_field :weight %>
+    </p>
+  <% end %>  
+  
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
